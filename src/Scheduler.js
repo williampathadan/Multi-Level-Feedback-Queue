@@ -1,5 +1,6 @@
 const Queue = require('./Queue'); 
-const { 
+const {
+    SchedulerInterrupt,
     QueueType,
     PRIORITY_LEVELS,
 } = require('./constants/index');
@@ -46,17 +47,41 @@ class Scheduler {
 
     // Adds a new process to the highest priority level running queue
     addNewProcess(process) {
-
+        this.runningQueues[0].enqueue(process);
     }
 
     // The scheduler's interrupt handler that receives a queue, a process, and an interrupt string
     // In the case of a PROCESS_BLOCKED interrupt, add the process to the blocking queue
     // In the case of a PROCESS_READY interrupt, add the process to highest priority running queue
+
     // In the case of a LOWER_PRIORITY interrupt, check to see if the input queue is a running queue or blocking queue
     // If it is a running queue, add the process to the next lower priority queue, or back into itself if it is already in the lowest priority queue
     // If it is a blocking queue, add the process back to the blocking queue
     handleInterrupt(queue, process, interrupt) {
+        const {
+            PROCESS_BLOCKED,
+            PROCESS_READY,
+            LOWER_PRIORITY,
+        } = SchedulerInterrupt;
 
+        if (interrupt === PROCESS_BLOCKED)
+            this.blockingQueue.enqueue(process);
+        
+        else if (interrupt === PROCESS_READY)
+            this.addNewProcess(process);
+        
+        else if (interrupt === LOWER_PRIORITY) {
+            const _queueType = queue.getQueueType();
+
+            if (_queueType === QueueType.CPU_QUEUE) {
+                const queuePriority = queue.getPriorityLevel();
+                const priority = (queuePriority === PRIORITY_LEVELS) ? queuePriority : queuePriority + 1 ;
+                
+                this.runningQueues[priority].enqueue(process);
+            }
+            else if (_queueType === QueueType.BLOCKING_QUEUE)
+                this.handleInterrupt(queue, process, PROCESS_BLOCKED);
+        }
     }
 
     // Private function used for testing; DO NOT MODIFY
