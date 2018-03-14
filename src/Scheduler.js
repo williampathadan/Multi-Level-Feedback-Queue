@@ -34,7 +34,14 @@ class Scheduler {
 
     // Checks that all queues have no processes 
     allEmpty() {
+        let isEmpty = this.blockingQueue.processes.length === 0;
 
+        for (let i = 0; i < PRIORITY_LEVELS; i++) {
+            if (this.runningQueues[i].processes.length !== 0)
+                return false;
+        }
+
+        return isEmpty;
     }
 
     // Adds a new process to the highest priority level running queue
