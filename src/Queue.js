@@ -63,7 +63,19 @@ class Queue {
     // If it isn't finished, emit a scheduler interrupt notifying the scheduler that this process
     // needs to be moved to a lower priority queue
     manageTimeSlice(currentProcess, time) {
-
+        if (currentProcess.isStateChanged()) {
+            this.quantumClock = 0;
+        } else {
+            this.quantumClock += time;
+            if (this.quantumClock > this.quantum) {
+                this.processes.splice(this.getPriorityLevel(), 1);
+                this.quantumClock = 0;
+                this.dequeue();
+                console.log("Rethink: Do you need both dequeue & splice");
+            } else {
+                this.scheduler.handleInterrupt(this, currentProcess, SchedulerInterrupt.LOWER_PRIORITY);
+            }
+        }
     }
 
     // Execute a non-blocking process
