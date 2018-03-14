@@ -43,12 +43,12 @@ class Process {
 
     // Returns this process's `this.stateChanged` property
     isStateChanged() {
-
+        
     }
 
     // Gets this process's pid
     get pid() {
-
+        return this._pid;
     }
 
     // Private function used for testing; DO NOT MODIFY
