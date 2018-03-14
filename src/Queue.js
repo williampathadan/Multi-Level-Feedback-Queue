@@ -1,4 +1,4 @@
-const { SchedulerInterrupt } = require('./constants/index');
+const { SchedulerInterrupt, QueueType } = require('./constants/index');
 
 // A class representation of a process queue that may hold either
 // blocking or non-blocking processes
@@ -70,14 +70,18 @@ class Queue {
     // Peeks the next process and runs its `executeProcess` method with input `time`
     // Call `this.manageTimeSlice` with the peeked process and input `time`
     doCPUWork(time) {
-
+        if (this.queueType === QueueType.CPU_QUEUE) {
+            const nextProcess = this.peek();
+            nextProcess.executeProcess(time);
+            this.manageTimeSlice(nextProcess, time);
+        }
     }
 
     // Execute a blocking process
     // Peeks the next process and runs its `executeBlockingProcess` method with input `time`
     // Call `this.manageTimeSlice` with the peeked process and input `time`
     doBlockingWork(time) {
-
+        
     }
 
     // The queue's interrupt handler for notifying when a process needs to be moved to a different queue
