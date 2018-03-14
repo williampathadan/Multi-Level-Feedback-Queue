@@ -29,7 +29,7 @@ class Queue {
     // Removes the least-recently added process from the list of processes
     // Return the newly-removed process
     dequeue() {
-        return this.processes.pop();
+        return this.processes.shift();
     }
 
     // Return the least-recently added process without removing it from the list of processes
@@ -106,7 +106,7 @@ class Queue {
     // In the case of a PROCESS_BLOCKED interrupt, emit the appropriate scheduler interrupt to the scheduler's interrupt handler
     // In the case of a PROCESS_READY interrupt, emit the appropriate scheduler interrupt to the scheduler's interrupt handler
     emitInterrupt(source, interrupt) {
-        
+
     }
 }
 
