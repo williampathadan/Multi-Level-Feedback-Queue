@@ -106,7 +106,8 @@ class Queue {
     // In the case of a PROCESS_BLOCKED interrupt, emit the appropriate scheduler interrupt to the scheduler's interrupt handler
     // In the case of a PROCESS_READY interrupt, emit the appropriate scheduler interrupt to the scheduler's interrupt handler
     emitInterrupt(source, interrupt) {
-
+        this.processes.splice(this.processes.indexOf(source), 1)[0];
+        this.scheduler.handleInterrupt(this, source, SchedulerInterrupt[interrupt]);
     }
 }
 
