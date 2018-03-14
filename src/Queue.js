@@ -20,7 +20,10 @@ class Queue {
     // Also sets the input process's parent queue to this queue
     // Return the newly added process
     enqueue(process) {
-        
+        const newLen = this.processes.push(process);
+        const newProcess = this.processes[newLen - 1];
+        newProcess.setParentQueue(this);
+        return newProcess;
     }
 
     // Removes the least-recently added process from the list of processes
