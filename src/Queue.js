@@ -68,7 +68,7 @@ class Queue {
         } else {
             this.quantumClock += time;
             if (this.quantumClock > this.quantum) {
-                this.processes.splice(this.getPriorityLevel(), 1);
+                this.processes.splice(this.processes.indexOf(currentProcess), 1);
                 this.quantumClock = 0;
                 this.dequeue();
                 console.log("Rethink: Do you need both dequeue & splice");
@@ -106,7 +106,7 @@ class Queue {
     // In the case of a PROCESS_BLOCKED interrupt, emit the appropriate scheduler interrupt to the scheduler's interrupt handler
     // In the case of a PROCESS_READY interrupt, emit the appropriate scheduler interrupt to the scheduler's interrupt handler
     emitInterrupt(source, interrupt) {
-
+        
     }
 }
 
