@@ -81,7 +81,11 @@ class Queue {
     // Peeks the next process and runs its `executeBlockingProcess` method with input `time`
     // Call `this.manageTimeSlice` with the peeked process and input `time`
     doBlockingWork(time) {
-        
+        if (this.queueType === QueueType.BLOCKING_QUEUE) {
+            const nextProcess = this.peek();
+            nextProcess.executeBlockingProcess(time);
+            this.manageTimeSlice(nextProcess, time);
+        }
     }
 
     // The queue's interrupt handler for notifying when a process needs to be moved to a different queue
